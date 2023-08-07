@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="css/style.css" />
+    <title>Static express html</title>
+  </head>
+  <body>
+    <div class="hero-image">
+      <div class="hero-text">
+        <h1>Programación Backend</h1>
+        <p>Ejemplo de archivos estáticos</p>
+        <form onsubmit="send(event)">
+          <input
+            id="form-name"
+            type="text"
+            name="form-name"
+            placeholder="Nombre"
+          />
+
+          <select id="form-species" placeholder="Especie">
+            <option>Especie</option>
+            <option value="perro">Perro</option>
+            <option value="gato">Gato</option>
+            <option value="conejo">Conejo</option>
+          </select>
+
+          <input
+            id="form-owner"
+            type="text"
+            name="form-owner"
+            placeholder="Dueño"
+          />
+
+          <input
+            id="form-file"
+            type="file"
+            name="form-file"
+            placeholder="Foto"
+          />
+
+          <input type="submit" value="Guardar Mascota" />
+        </form>
+        <p id="mascota-id"></p>
+      </div>
+    </div>
+
+    <script>
+      async function send(event) {
+        event.preventDefault();
+        const nombre = document.getElementById('form-name').value;
+        const especie = document.getElementById('form-species').value;
+        const dueño = document.getElementById('form-owner').value;
+        const file = document.getElementById('form-file');
+        const formData = new FormData();
+        formData.append('nombre', nombre);
+        formData.append('especie', especie);
+        formData.append('duenio', dueño);
+        formData.append('file', file.files[0]);
+        const response = await fetch('/api/pets', {
+          method: 'POST',
+          body: formData,
+          headers: {
+          },
+        });
+        if (response.ok) {
+          response.json().then((d) => {
+            const p = document.getElementById('mascota-id');
+            p.innerText = `Creada mascota ${d.id}`;
+          });
+        }
+      }
+    </script>
+  </body>
+</html>
